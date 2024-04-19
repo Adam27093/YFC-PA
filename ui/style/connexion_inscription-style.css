@@ -1,0 +1,107 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: #eaeaea;
+  }
+  
+  .flex-container {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  .login-section {
+    flex: 0 1 40%;
+    background-color: #000;
+    color: white;
+    position: relative; /* Ajout pour positionner le logo */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px;
+  }
+  
+  .logo-yfc {
+    position: absolute;
+    top: 20px; /* Ajustez selon vos besoins */
+    right: 20px; /* Ajustez selon vos besoins */
+    max-width: 100px; /* Ajustez selon la taille souhaitée du logo */
+  }
+  
+  .login-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .login-section form {
+    width: 100%;
+  }
+  
+  .login-section input,
+  .login-section button {
+    height: 50px;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding: 0 20px;
+    font-size: 1rem;
+  }
+  
+  .login-section input {
+    background: none;
+    border: 2px solid #fff;
+    border-radius: 30px;
+    color: white;
+    margin-bottom: 20px;
+  }
+  
+  .login-section button {
+    border: none;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .login-section button.connexion {
+    background-color: red;
+    color: white;
+  }
+  
+  .login-section button.inscription {
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+  }
+  
+  .ou {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px 0;
+    color: white;
+  }
+  
+  .ou .barre {
+    flex-grow: 1;
+    height: 1px;
+    background-color: #fff;
+    margin: 0 10px;
+  }
+  
+  .image-section {
+    flex-grow: 1;
+    background-size: cover;
+    background-position: center;
+    background-image: url('../resources/YFCNOIR.jpeg'); /* Assurez-vous que le chemin est correct */
+  }
+  
+  @media (max-width: 768px) {
+    .flex-container {
+      flex-direction: column;
+    }
+    
+    .login-section, .image-section {
+      flex-basis: 100%;
+    }
+  }
