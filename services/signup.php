@@ -1,16 +1,11 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+require_once('config.php');
+
 // Vérification si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Connexion à la base de données
-    $servername = "localhost";
-    $username = "yfc";
-    $password = "123";
-    $dbname = "YFC";
 
     // Connexion à la base de données avec MySQLi
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
     // Vérification de la connexion
     if ($conn->connect_error) {
