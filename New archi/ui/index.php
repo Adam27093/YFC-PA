@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YFC Event Header</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style/index-style.css">
 </head>
 <body>
 <div class="header">
     <div class="left-side">
-        <img src="Logo yfc.png" alt="Logo" class="logo">
+        <img src="resources/Logo yfc.png" alt="Logo" class="logo">
         <a href="/events" class="nav-link">Événements</a>
         <a href="/fighters" class="nav-link">Combattants</a>
         <a href="/media" class="nav-link">Médias</a>
@@ -17,10 +17,35 @@
         <a href="/shop" class="nav-link">Boutique</a>
         <a href="/faq" class="nav-link">FAQ</a>
     </div>
-    <div class="right-side">
+    <?php
+    session_start();
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+
+    // Vérifier si l'utilisateur est connecté
+    if (isset($_SESSION['user_id']) && $_SESSION['est_admin']) {
+        // L'utilisateur est connecté, afficher le bouton de déconnexion
+        $prenom_utilisateur = $_SESSION['prenom_utilisateur'];
+        echo '<div class="right-side">
+        <span>Bonjour, ' . $prenom_utilisateur . '</span>
+        <a href="back-office.php" class="nav-link">Back-Office</a>
+        <a href="../services/logout.php" class="nav-link">Déconnexion</a>
+        </div>';
+    } elseif (isset($_SESSION['user_id'])) {
+        // L'utilisateur est connecté, afficher le bouton de déconnexion
+        $prenom_utilisateur = $_SESSION['prenom_utilisateur'];
+        echo '<div class="right-side">
+        <span>Bonjour, ' . $prenom_utilisateur . '</span>
+        <a href="../services/logout.php" class="nav-link">Déconnexion</a>
+        </div>';
+    } else {
+        // L'utilisateur n'est pas connecté, afficher les boutons de connexion et d'inscription
+        echo '<div class="right-side">
         <a href="connexion.php" class="nav-link">Connexion</a>
-        <a href="inscription.php" class="nav-link">S'inscrire</a>
-    </div>
+        <a href="inscription.php" class="nav-link">S\'inscrire</a>
+        </div>';
+    }
+    ?>
 </div>
 <div class="sub-header">
     <div class="event-info">
@@ -33,7 +58,7 @@
     <h2>Nos Meilleurs Combattants !</h2>
     <div class="highlighted-fighter">
         <!--  image de fond pour le combattant en vedette -->
-        <img src="yfcvedettecombatant.jpg" alt="Combattant en vedette">
+        <img src="resources/yfcvedettecombatant.jpg" alt="Combattant en vedette">
         <div class="fighter-info">
             <h3>Combattant en vedette</h3>
             <!-- Ajoutez d'autres informations sur le combattant si nécessaire -->
@@ -45,7 +70,7 @@
     <section class="community-section">
         <h2>UNE COMMUNAUTÉ DE COMBATTANT !</h2>
         <div class="community-content">
-            <img src="forum.jpeg.jpeg" alt="forum">
+            <img src="resources/forum.jpeg" alt="forum">
             <p>Rejoignez-nous pour discuter des combats !</p>
             <a href="/forum" class="btn-community">FORUM COMMUNAUTÉ</a>
         </div>
@@ -54,7 +79,7 @@
     <section class="store-section">
         <h2>NOTRE BOUTIQUE !</h2>
 
-        <img src="Boutique.jpeg.jpeg" alt="boutique">
+        <img src="resources/Boutique.jpeg" alt="boutique">
         <a href="/store" class="btn-store">BOUTIQUE</a>
         <!-- Vous pouvez ajouter ici d'autres éléments de la boutique si nécessaire -->
     </section>
