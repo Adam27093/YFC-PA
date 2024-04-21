@@ -8,7 +8,7 @@ require_once("../config.php");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Utilisateurs</title>
+    <title>Logs de connexion/inscription</title>
     <style>
         table {
             border-collapse: collapse;
@@ -22,18 +22,6 @@ require_once("../config.php");
         th {
             background-color: #f2f2f2;
         }
-        .delete-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
@@ -46,7 +34,6 @@ require_once("../config.php");
         <th>Nom</th>
         <th>Prénom</th>
         <th>Email</th>
-        <th>Action</th>
     </tr>
     </thead>
     <tbody>
@@ -59,21 +46,20 @@ require_once("../config.php");
     }
 
     // Requête pour récupérer les utilisateurs
-    $sql = "SELECT nom, prenom, email FROM Utilisateur WHERE est_admin = 0";
+    $sql = "SELECT * FROM Log";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         // Affichage des utilisateurs dans le tableau
         while($row = $result->fetch_assoc()) {
             echo "<tr>";
-            echo "<td>" . $row["nom"] . "</td>";
-            echo "<td>" . $row["prenom"] . "</td>";
-            echo "<td>" . $row["email"] . "</td>";
-            echo '<td><button class="delete-btn">Supprimer</button></td>';
+            echo "<td>" . $row["type"] . "</td>";
+            echo "<td>" . $row["email_utilisateur"] . "</td>";
+            echo "<td>" . $row["date_heure"] . "</td>";
             echo "</tr>";
         }
     } else {
-        echo "<tr><td colspan='4'>Aucun utilisateur trouvé</td></tr>";
+        echo "<tr><td colspan='4'>Aucun log trouvé</td></tr>";
     }
 
     // Fermeture de la connexion à la base de données
