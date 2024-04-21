@@ -20,6 +20,7 @@
     <a href="media.php">Gérer les médias</a>
     <a href="produit.php">Gérer les produits</a>
     <a href="posts.php">Gérer les posts du forum</a>
+    <a href="logs.php">Logs</a>
 </div>
 </body>
 </html>

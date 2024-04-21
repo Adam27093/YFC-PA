@@ -1,6 +1,5 @@
 <?php
 session_start();
-require_once('config.php');
 
 // Détruire toutes les données de session
 $_SESSION = array();

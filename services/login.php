@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('config.php');
+require_once('../config.php');
 
 // On Vérifie si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -29,24 +29,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = $result->fetch_assoc();
         // Vérifier si le mot de passe est correct
         if (password_verify($_POST['mot_de_passe'], $user['mot_de_passe'])) {
-            // Utilisateur connecté avec succès, enregistrement de l'identifiant de l'utilisateur dans la session
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['prenom_utilisateur'] = $user['prenom'];
-            $_SESSION['est_admin'] = $user['est_admin'];
-            // Redirection vers une page sécurisée par exemple
-            header("Location: ../ui/index.php");
-            exit();
+            // On vérifie que l'email de l'utilisateur est confirmé
+            if (!$user['est_confirme']) {
+                $error_message = "Votre compte n'est pas confirmé. Veuillez vérifier votre e-mail pour activer votre compte.";
+                header("Location: ../ui/connexion.php?error_message=" . urlencode($error_message));
+                $stmt->close();
+                $conn->close();
+                exit();
+            } else {
+                // Utilisateur connecté avec succès, enregistrement de l'identifiant de l'utilisateur dans la session
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['prenom_utilisateur'] = $user['prenom'];
+                $_SESSION['est_admin'] = $user['est_admin'];
+                $_SESSION['email'] = $user['email'];
+
+                // Enregistrement du log de connexion
+                $timestamp = date("Y-m-d H:i");
+                $stmt = $conn->prepare("INSERT INTO Log (type, email_utilisateur, date_heure) VALUES ('connexion', ?, ?)");
+                $stmt->bind_param("ss", $user['email'], $timestamp);
+                $stmt->execute();
+
+                header("Location: ../ui/index.php");
+                $stmt->close();
+                $conn->close();
+                exit();
+            }
         } else {
             // Mot de passe incorrect
-            echo "Mot de passe incorrect.";
+            $error_message = "Mot de passe incorrect. Veuillez réessayer.";
+            header("Location: ../ui/connexion.php?error_message=" . urlencode($error_message));
+            $stmt->close();
+            $conn->close();
+            exit();
         }
     } else {
         // Utilisateur non trouvé
-        echo "Utilisateur non trouvé.";
+        $error_message = "Utilisateur non trouvé.";
+        header("Location: ../ui/connexion.php?error_message=" . urlencode($error_message));
+        $stmt->close();
+        $conn->close();
+        exit();
     }
-
-    // Fermer la connexion
-    $stmt->close();
-    $conn->close();
 }
 ?>
