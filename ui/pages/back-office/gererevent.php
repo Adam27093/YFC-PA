@@ -8,7 +8,7 @@ require_once("back-office.php");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gérer les événements</title>
-    <link rel="stylesheet" href="style/backoffice.css">
+    <link rel="stylesheet" href="../../style/backoffice.css">
 </head>
 <body>
 <div class="form-container">

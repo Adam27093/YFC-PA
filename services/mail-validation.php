@@ -8,33 +8,29 @@ if (isset($_GET['token'])) {
 
     // Connexion à la base de données
     require_once('../config.php');
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-
-    // Vérification de la connexion
-    if ($conn->connect_error) {
-        echo "Erreur de connexion à la base de données : " . $conn->connect_error;
+    try {
+        $pdo = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME, DB_USER, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch(PDOException $e) {
+        echo "Erreur de connexion à la base de données : " . $e->getMessage();
         die();
     }
 
     // Recherche de l'utilisateur dans la base de données en utilisant le token
-    $stmt = $conn->prepare("SELECT id FROM Utilisateur WHERE token = ?");
-    $stmt->bind_param("s", $token);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    $stmt = $pdo->prepare("SELECT id, email FROM Utilisateur WHERE token = ?");
+    $stmt->execute([$token]);
+    $user = $stmt->fetch();
 
-    if ($result->num_rows > 0) {
-        $user = $result->fetch_assoc();
+    if ($user) {
         $user_id = $user['id'];
         $user_email = $user['email'];
 
-        $update_stmt = $conn->prepare("UPDATE Utilisateur SET est_confirme = 1 WHERE id = ?");
-        $update_stmt->bind_param("i", $user_id);
-        if ($update_stmt->execute()) {
+        $update_stmt = $pdo->prepare("UPDATE Utilisateur SET est_confirme = 1 WHERE id = ?");
+        if ($update_stmt->execute([$user_id])) {
             // Enregistrement du log d'inscription confirmée
             $timestamp = date("Y-m-d H:i");
-            $stmt = $conn->prepare("INSERT INTO Log (type, email_utilisateur, date_heure) VALUES ('inscription_confirmée', ?, ?)");
-            $stmt->bind_param("ss", $user['email'], $timestamp);
-            $stmt->execute();
+            $log_stmt = $pdo->prepare("INSERT INTO Logs (type, email_utilisateur, date_heure) VALUES ('confirmation_inscription', ?, ?)");
+            $log_stmt->execute([$user_email, $timestamp]);
 
             // Redirection vers une page de confirmation réussie
             header("Location: ../ui/confirmation-reussie.php");
@@ -43,17 +39,14 @@ if (isset($_GET['token'])) {
             echo "Erreur lors de la mise à jour de la validation de l'utilisateur.";
         }
     } else {
-        // Redirection vers une page de confirmation échouée
-        // header("Location: ../ui/confirmation-echouee.php");
         exit();
     }
 
-    // Fermer la connexion
-    $stmt->close();
-    $update_stmt->close();
-    $conn->close();
+    // Fermer les curseurs
+    $stmt->closeCursor();
+    $update_stmt->closeCursor();
 } else {
     // Gérer le cas où le token n'est pas présent dans l'URL
     echo "Le token est manquant dans l'URL.";
 }
-
+?>
