@@ -5,23 +5,21 @@ require_once('./mailing.php');
 // Vérification si le formulaire a été soumis
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Connexion à la base de données avec MySQLi
-    $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
-
-    // Vérification de la connexion
-    if ($conn->connect_error) {
-        echo "Erreur de connexion à la base de données : " . $conn->connect_error;
-        die("Erreur de connexion à la base de données : " . $conn->connect_error);
+    // Connexion à la base de données avec PDO
+    try {
+        $pdo = new PDO("mysql:host=".DB_HOST.";dbname=".DB_NAME, DB_USER, DB_PASSWORD);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch(PDOException $e) {
+        echo "Erreur de connexion à la base de données : " . $e->getMessage();
+        die("Erreur de connexion à la base de données : " . $e->getMessage());
     }
 
     // Préparation de la requête SQL pour vérifier si l'e-mail existe déjà
     $email = $_POST['email'];
-    $stmt = $conn->prepare("SELECT id FROM Utilisateur WHERE email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
+    $stmt = $pdo->prepare("SELECT id FROM Utilisateur WHERE email = ?");
+    $stmt->execute([$email]);
 
-    if ($stmt->num_rows > 0) {
+    if ($stmt->rowCount() > 0) {
         echo "L'adresse e-mail est déjà utilisée.";
     } else {
         // Préparation de la requête SQL pour insérer un nouvel utilisateur
@@ -31,11 +29,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $prenom = $_POST['prenom'];
         $token = uniqid(rand(), true); // Génère un identifiant unique basé sur la date/heure actuelle et une valeur aléatoire
 
-        $stmt = $conn->prepare("INSERT INTO Utilisateur (nom, prenom, email, mot_de_passe, token) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $nom, $prenom, $email, $hashed_password, $token);
-
-        // Exécution de la requête
-        if ($stmt->execute()) {
+        $stmt = $pdo->prepare("INSERT INTO Utilisateur (nom, prenom, email, mot_de_passe, token) VALUES (?, ?, ?, ?, ?)");
+        if ($stmt->execute([$nom, $prenom, $email, $hashed_password, $token])) {
             echo "Nouveau compte créé avec succès !";
 
             // Envoi d'un e-mail de confirmation
@@ -54,18 +49,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Enregistrement du log d'inscription
             $timestamp = date("Y-m-d H:i");
-            $stmt = $conn->prepare("INSERT INTO Log (type, email_utilisateur, date_heure) VALUES ('inscription', ?, ?)");
-            $stmt->bind_param("ss", $email, $timestamp);
-            $stmt->execute();
+            $stmt = $pdo->prepare("INSERT INTO Logs (type, email_utilisateur, date_heure) VALUES ('inscription', ?, ?)");
+            $stmt->execute([$email, $timestamp]);
 
             header("Location: ../ui/inscription-terminee.php");
+            exit();
         } else {
-            echo "Erreur lors de la création du compte : " . $conn->error;
+            echo "Erreur lors de la création du compte : " . $pdo->errorInfo()[2];
         }
     }
-
-    // Fermer la connexion
-    $stmt->close();
-    $conn->close();
 }
 ?>
