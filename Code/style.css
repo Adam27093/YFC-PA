@@ -8,8 +8,11 @@ body, html {
     background-image: url('Yfc1.png.png'); 
     background-size: cover;
     background-position: center;
-    text-align: center;
-    padding: 200px;
+    padding: 4rem 10rem;
+    display: flex;
+    flex-direction: column;
+    height: 40rem;
+    gap: 5rem;
   }
   .logo {
     max-width: 100px; /* Adapter selon la taille réelle du logo */
@@ -18,10 +21,11 @@ body, html {
   
   
   .navbar {
-    background-color:  rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
+    background-color:  rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
     padding: 10px 0;
     align-items: baseline;
     margin-bottom: 20px; /* Adjust as necessary */
+    border-radius: 10px;
   }
   
   .nav-link {
