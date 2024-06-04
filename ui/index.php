@@ -10,6 +10,7 @@
 
 <?php
 include_once('header.php');
+require_once('../services/page_visits.php');
 ?>
 
 <div class="sub-header">

@@ -11,13 +11,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $pdo->prepare("DELETE FROM Utilisateur WHERE id = ?");
         $stmt->execute([$user_id]);
 
-        header("Location: liste_utilisateurs.php");
+        header("Location: ../ui/pages/back-office/utilisateurs.php");
         exit();
     } catch (PDOException $e) {
         die("Erreur de suppression de l'utilisateur : " . $e->getMessage());
     }
 } else {
-    header("Location: liste_utilisateurs.php");
+    header("Location: ../ui/pages/back-office/utilisateurs.php");
     exit();
 }
 ?>

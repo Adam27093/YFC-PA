@@ -1,4 +1,5 @@
 <?php
+require_once('../services/page_visits.php');
 ?>
 
 <!DOCTYPE html>

@@ -8,7 +8,7 @@ require_once("back-office.php");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gérer les Médias</title>
-    <link rel="stylesheet" href="../../style/index-style.css">
+    <link rel="stylesheet" href="back-office.css">
 </head>
 <body>
 <div class="container">

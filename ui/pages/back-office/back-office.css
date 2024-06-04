@@ -1,0 +1,56 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.back-office-header {
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.back-office-navigation {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    background-color: #667078;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+.back-office-navigation a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    transition: background-color 0.3s;
+}
+
+.back-office-navigation a:hover, .back-office-navigation a.active {
+    background-color: #007bff;
+    border-radius: 5px;
+}
+
+th {
+    background-color: #343a40;
+    color: white;
+}
+
+.nav {
+    background-color: #dddddd;
+    border-radius: 10px;
+    width: 30rem;
+    display: flex;
+    align-self: center;
+}
+.nav-link {
+    color: white;
+    padding: 10px 20px;
+}
+.nav-link.active {
+    background-color: #86898d;
+    border-radius: 5px;
+}
+.nav-item {
+    margin: 0 10px;
+}
