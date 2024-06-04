@@ -12,13 +12,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $pdo->prepare("UPDATE Utilisateur SET est_admin = ? WHERE id = ?");
         $stmt->execute([$is_admin, $user_id]);
 
-        header("Location: liste_utilisateurs.php");
+
+        header("Location: ../ui/pages/back-office/utilisateurs.php");
         exit();
     } catch (PDOException $e) {
         die("Erreur de mise à jour du statut admin : " . $e->getMessage());
     }
 } else {
-    header("Location: liste_utilisateurs.php");
+    header("Location: ../ui/pages/back-office/utilisateurs.php");
     exit();
 }
 ?>

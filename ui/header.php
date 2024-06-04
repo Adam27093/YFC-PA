@@ -2,7 +2,6 @@
 session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-require_once('../services/page_visits.php');
 ?>
 
 <div class="header">
